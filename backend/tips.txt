@@ -1,0 +1,29 @@
+I'm using XAMPP for local environment
+https://www.apachefriends.org/download.html
+and Composer for Laravel
+https://laravel.com/docs/4.2/installation
+Download/configure/install Laravel
+composer global require "laravel/installer=~1.1"
+Create project
+composer create-project --prefer-dist laravel/laravel htdocs
+
+php artisan serve
+php artisan make:controller FileController --resource
+
+Set MySql properties
+Change .env to set database name
+	DB_DATABASE=GoREACT-applicant-project
+Set on database.php for collation on mysql
+	'collation' => 'utf8mb4_unicode_ci', // create database with this collation
+	'engine' => 'InnoDB' // relational databases
+Set on AppServiceProvider.php the shema for collation utf8mb4_unicode_ci which is standard 191
+	use Illuminate\Support\Facades\Schema;
+	public function boot()
+    {
+        Schema::defaultStringLength(191);
+    }
+	
+Add migration
+	php artisan make:model Models\ModelFile -m
+Run migrations
+	php artisan migrate
