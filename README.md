@@ -1,5 +1,5 @@
 # GoREACT-applicant-project
-![goreact.png](https://gitlab.goreact.com/GoREACT) GoREACT applicant project
+![goreact.png](goreact.png) GoREACT applicant project
 
 ## Backend in PHP Laravel framework
 Location [here](backend)
