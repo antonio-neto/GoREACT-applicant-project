@@ -1,0 +1,15 @@
+<table class="table table-dark table-hover table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let file of files; let i=index;">
+      <td>
+        {{file.id}} - {{file.file_name}}
+      </td>
+    </tr>
+  </tbody>
+</table>
