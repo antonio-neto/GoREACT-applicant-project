@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\File;
+use App\ViewModels\FileViewModel;
 
 class FileController extends Controller
 {
@@ -39,10 +40,13 @@ class FileController extends Controller
     public function getFiles()
     {
         $files = $this->objFile->all()->sortBy('file_name');
-        foreach($files as $file){
-
+        $filesCount = $files->count();
+        $filesResult = array($filesCount);
+        for($auxFile = 0; $auxFile < $filesCount; $auxFile++){
+          $filesResult[$auxFile] = new FileViewModel($files[$auxFile]);
         }
-        return $file;
+
+        return $filesResult;
     }
 
     /**
