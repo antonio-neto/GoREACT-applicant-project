@@ -1,6 +1,6 @@
 <div class="container">
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
-    <h4 class="mb-3">File info</h4>
+    <h4 class="mb-3">Add file</h4>
     <div class="row">
       <div class="mb-12">
         <label for="email">File</label>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="row">
-      <div>
+      <div class="mb-12">
         <label for="title">Title <span class="text-muted">(Optional)</span></label>
         <input type="text" class="form-control" [(ngModel)]="title" name="title" placeholder="title" />
       </div>
@@ -19,17 +19,17 @@
     <div class="row">
       <div class="mb-12">
         <label for="email">Description <span class="text-muted">(Optional)</span></label>
-        <input type="text" class="form-control" [(ngModel)]="description" name="description" placeholder="description" />
+        <textarea class="form-control" [(ngModel)]="description" name="description" placeholder="description"></textarea>
       </div>
     </div>
     <div class="row">
       <div class="mb-12">
         <label for="email">Tags <span class="text-muted">(Optional)</span></label>
-        <input type="text" class="form-control" [(ngModel)]="tags" name="tags" placeholder="tags" />
+        <textarea class="form-control" [(ngModel)]="tags" name="tags" placeholder="tags"></textarea>
       </div>
     </div>
     <div class="row">
-      <button class="btn btn-secondary">Upload File</button>
+      <button class="btn btn-success">Add</button>
     </div>
   </form>
   <hr />
