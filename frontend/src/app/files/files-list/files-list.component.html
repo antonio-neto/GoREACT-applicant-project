@@ -25,14 +25,14 @@
     </div>
   </form>
   <hr />
-  <div class="row mb-5">
+  <div class="row mb-2">
     <div class="col-3 themed-grid-col"></div>
-    <div class="col-2 themed-grid-col">Title</div>
-    <div class="col-3 themed-grid-col">Description</div>
-    <div class="col-2 themed-grid-col">Tags</div>
+    <div class="col-2 themed-grid-col"><strong>Title</strong></div>
+    <div class="col-3 themed-grid-col"><strong>Description</strong></div>
+    <div class="col-2 themed-grid-col"><strong>Tags</strong></div>
     <div class="col-2 themed-grid-col"></div>
   </div>
-  <div class="row mb-5" *ngFor="let file of files; let i=index;">
+  <div class="row mb-2" *ngFor="let file of files; let i=index;">
     <div class="col-3 themed-grid-col">
       <img *ngIf="file.type === jpegFileType; else videoBlock" [src]="filesUrl + file.savedName" class="image">
       <ng-template #videoBlock>
