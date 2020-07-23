@@ -18,7 +18,10 @@ class CreateModelFilesTable extends Migration
             $table->string('file_name');
             $table->string('file_type');
             $table->string('file_name_saved');
-            $table->unsignedBigInteger('id_user');
+            $table->string('title')->nullable();
+            $table->string('description')->nullable();
+            $table->string('tags')->nullable();
+            $table->unsignedBigInteger('id_user')->nullable();
             $table->foreign('id_user')->references('id')->on('users');
             $table->timestamps();
         });
