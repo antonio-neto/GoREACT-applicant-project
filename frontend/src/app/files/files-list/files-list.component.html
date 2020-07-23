@@ -2,31 +2,23 @@
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <h4 class="mb-3">Add file</h4>
     <div class="row">
-      <div class="mb-12">
-        <label for="email">File</label>
-        <input type="file" class="form-control" #fileupload [(ngModel)]="myFile" name="myFile" (change)="fileEvent($event)"/>
-        <div class="invalid-feedback"[ngClass]="{'display-block': showErrorMessageFileType}">
-          File type not supported (only JPG/MP4).
-        </div>
+      <label for="email">File</label>
+      <input type="file" class="form-control" #fileupload [(ngModel)]="myFile" name="myFile" (change)="fileEvent($event)"/>
+      <div class="invalid-feedback"[ngClass]="{'display-block': showErrorMessageFileType}">
+        File type not supported (only JPG/MP4).
       </div>
     </div>
     <div class="row">
-      <div class="mb-12">
-        <label for="title">Title <span class="text-muted">(Optional)</span></label>
-        <input type="text" class="form-control" [(ngModel)]="title" name="title" placeholder="title" />
-      </div>
+      <label for="title">Title <span class="text-muted">(Optional)</span></label>
+      <input type="text" class="form-control" [(ngModel)]="title" name="title" placeholder="title" />
     </div>
     <div class="row">
-      <div class="mb-12">
-        <label for="email">Description <span class="text-muted">(Optional)</span></label>
-        <textarea class="form-control" [(ngModel)]="description" name="description" placeholder="description"></textarea>
-      </div>
+      <label for="email">Description <span class="text-muted">(Optional)</span></label>
+      <textarea class="form-control" [(ngModel)]="description" name="description" placeholder="description"></textarea>
     </div>
     <div class="row">
-      <div class="mb-12">
-        <label for="email">Tags <span class="text-muted">(Optional)</span></label>
-        <textarea class="form-control" [(ngModel)]="tags" name="tags" placeholder="tags"></textarea>
-      </div>
+      <label for="email">Tags <span class="text-muted">(Optional)</span></label>
+      <textarea class="form-control" [(ngModel)]="tags" name="tags" placeholder="tags"></textarea>
     </div>
     <div class="row">
       <button class="btn btn-success">Add</button>
