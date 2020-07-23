@@ -1,15 +1,58 @@
-<table class="table table-dark table-hover table-striped">
-  <thead class="thead-light">
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let file of files; let i=index;">
-      <td>
-        {{file.id}} - {{file.name}}
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="container">
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <h4 class="mb-3">File info</h4>
+    <div class="row">
+      <div class="mb-12">
+        <label for="email">File</label>
+        <input type="file" class="form-control" #fileupload [(ngModel)]="myFile" name="myFile" (change)="fileEvent($event)"/>
+        <div class="invalid-feedback"[ngClass]="{'display-block': showErrorMessageFileType}">
+          File type not supported (only JPG/MP4).
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label for="title">Title <span class="text-muted">(Optional)</span></label>
+        <input type="text" class="form-control" [(ngModel)]="title" name="title" placeholder="title" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="mb-12">
+        <label for="email">Description <span class="text-muted">(Optional)</span></label>
+        <input type="text" class="form-control" [(ngModel)]="description" name="description" placeholder="description" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="mb-12">
+        <label for="email">Tags <span class="text-muted">(Optional)</span></label>
+        <input type="text" class="form-control" [(ngModel)]="tags" name="tags" placeholder="tags" />
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-secondary">Upload File</button>
+    </div>
+  </form>
+  <hr />
+  <div class="row mb-5">
+    <div class="col-3 themed-grid-col"></div>
+    <div class="col-2 themed-grid-col">Title</div>
+    <div class="col-3 themed-grid-col">Description</div>
+    <div class="col-2 themed-grid-col">Tags</div>
+    <div class="col-2 themed-grid-col"></div>
+  </div>
+  <div class="row mb-5" *ngFor="let file of files; let i=index;">
+    <div class="col-3 themed-grid-col">
+      <img *ngIf="file.type === jpegFileType; else videoBlock" [src]="filesUrl + file.savedName" class="image">
+      <ng-template #videoBlock>
+        <video class="video" controls>
+          <source [src]="filesUrl + file.savedName" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </ng-template>
+    </div>
+    <div class="col-2 themed-grid-col">{{file.title}}</div>
+    <div class="col-3 themed-grid-col">{{file.description}}</div>
+    <div class="col-2 themed-grid-col">{{file.tags}}</div>
+    <div class="col-2 themed-grid-col"><button class="btn btn-secondary" (click)="removeFile(file)">Delete</button></div>
+  </div>
+</div>

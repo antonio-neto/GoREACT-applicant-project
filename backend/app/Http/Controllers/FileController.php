@@ -41,6 +41,10 @@ class FileController extends Controller
     {
         $files = $this->objFile->all()->sortBy('file_name');
         $filesCount = $files->count();
+        if ($filesCount == 0){
+          return [];
+        }
+
         $filesResult = array($filesCount);
         for($auxFile = 0; $auxFile < $filesCount; $auxFile++){
           $filesResult[$auxFile] = new FileViewModel($files[$auxFile]);
@@ -54,64 +58,72 @@ class FileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
-    }
+      // dd($request->file('file'));
+      if ($request->hasFile('file'))
+      {
+            $file      = $request->file('file');
+            $mimeType = $file->getMimeType();
+            if ($mimeType !== 'image/jpeg' && $mimeType !== 'video/mp4'){
+              return response()->json(["message" => "File type not supported (only JPG/MP4)."]);
+            }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+            $filename  = $file->getClientOriginalName();
+            $fileNameSaved = date('YmdHis').'-'.$filename;
+            $file->move(public_path('content_files'), $fileNameSaved);
+            $currentDateTime = date('Y-m-d H:i:s');
+            $this->objFile->create([
+              'file_name' => $filename,
+              'file_type' => $mimeType,
+              'file_name_saved' => $fileNameSaved,
+              'title' => $request->title,
+              'description' => $request->description,
+              'tags' => $request->tags,
+              'created_at' => $currentDateTime,
+              'updated_at' => $currentDateTime]);
+            return response()->json(["message" => "File Uploaded Succesfully"]);
+      } 
+      else
+      {
+        return response()->json(["message" => "Select a file first."]);
+      }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $fileName
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(int $id, string $fileName)
     {
-        //
-    }
+      // dd(public_path('content_files' . DIRECTORY_SEPARATOR . $fileName));
+      // echo(public_path('content_files\\' .$fileName));
+      $deletionFileResult = unlink(public_path('content_files' . DIRECTORY_SEPARATOR . $fileName));
+
+      if(!$deletionFileResult){
+        return $this->createResponse($deletionFileResult, $fileName);
+      }
+
+      $deletionDBResult = $this->objFile->destroy($id);
+
+      return $this->createResponse($deletionDBResult, $fileName);
+  }
+
+  private function createResponse(bool $success, string $fileName)
+    {
+      if ($success){
+        $errorMessage = '';
+        $httpCode = 200;
+        $message = 'File Successfully deleted!';
+      }
+      else{
+        $errorMessage = 'Not possibble to delete File ' . $fileName;
+        $httpCode = 500;
+        $message = $errorMessage;
+      }
+
+      return response()->json(['errors' => [ $errorMessage ], 'message' => $message, 'status' => $httpCode], $httpCode);
+  }
 }

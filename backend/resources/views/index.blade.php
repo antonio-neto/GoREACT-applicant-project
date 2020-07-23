@@ -19,19 +19,23 @@
                 <th scope="col">Type</th>
                 <th scope="col">Saved file</th>
                 <th scope="col">User</th>
-                <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
 
             @foreach($file as $files)
                 @php
-                    $user=$files->find($files->id)->relUsers;
+                    $userName = '(not set)';
+                    if($files->id_user !== null){
+                      $userName=$files->find($files->id)->relUsers->name;
+                    }
                 @endphp
                 <tr>
                     <th scope="row">{{$files->id}}</th>
                     <td>{{$files->file_name}}</td>
-                    <td>{{$user->name}}</td>
+                    <td>{{$files->file_type}}</td>
+                    <td>{{$files->file_name_saved}}</td>
+                    <td>{{$userName}}</td>
                 </tr>
             @endforeach
             </tbody>
