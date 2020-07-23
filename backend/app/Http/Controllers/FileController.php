@@ -37,9 +37,19 @@ class FileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getFiles()
+    public function getFiles(Request $request)
     {
-        $files = $this->objFile->all()->sortBy('file_name');
+        $searchTerm = $request->input('search');
+        if($searchTerm == 'undefined' || $searchTerm == null) {
+          $files = $this->objFile->all()->sortBy('created_at');
+        }
+        else{
+          $files = $this->objFile->where('title','LIKE','%'. $searchTerm .'%')
+          ->orWhere('description', 'LIKE', '%' . $searchTerm. '%')
+          ->orWhere('tags', 'LIKE', '%' . $searchTerm. '%')
+          ->get()->sortBy('created_at');
+        }
+        
         $filesCount = $files->count();
         if ($filesCount == 0){
           return [];
@@ -73,13 +83,16 @@ class FileController extends Controller
             $fileNameSaved = date('YmdHis').'-'.$filename;
             $file->move(public_path('content_files'), $fileNameSaved);
             $currentDateTime = date('Y-m-d H:i:s');
+            $title = $request->title;
+            $description = $request->description;
+            $tags = $request->tags;
             $this->objFile->create([
               'file_name' => $filename,
               'file_type' => $mimeType,
               'file_name_saved' => $fileNameSaved,
-              'title' => $request->title,
-              'description' => $request->description,
-              'tags' => $request->tags,
+              'title' => $this->ConvertNotDefinedStringToEmpty($title),
+              'description' => $this->ConvertNotDefinedStringToEmpty($description),
+              'tags' => $this->ConvertNotDefinedStringToEmpty($tags),
               'created_at' => $currentDateTime,
               'updated_at' => $currentDateTime]);
             return response()->json(["message" => "File Uploaded Succesfully"]);
@@ -125,5 +138,13 @@ class FileController extends Controller
       }
 
       return response()->json(['errors' => [ $errorMessage ], 'message' => $message, 'status' => $httpCode], $httpCode);
+  }
+
+  private function ConvertNotDefinedStringToEmpty(string $text){
+    if ($text == null || $text == 'null' || $text == 'undefined'){
+      return '';
+    }
+
+    return $text;
   }
 }
