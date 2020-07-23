@@ -13,11 +13,11 @@
       <input type="text" class="form-control" [(ngModel)]="title" name="title" placeholder="title" />
     </div>
     <div class="row">
-      <label for="email">Description <span class="text-muted">(Optional)</span></label>
+      <label for="description">Description <span class="text-muted">(Optional)</span></label>
       <textarea class="form-control" [(ngModel)]="description" name="description" placeholder="description"></textarea>
     </div>
     <div class="row">
-      <label for="email">Tags <span class="text-muted">(Optional)</span></label>
+      <label for="tags">Tags <span class="text-muted">(Optional)</span></label>
       <textarea class="form-control" [(ngModel)]="tags" name="tags" placeholder="tags"></textarea>
     </div>
     <div class="row">
@@ -25,6 +25,10 @@
     </div>
   </form>
   <hr />
+  <div class="row">
+      <input type="text" class="form-control offset-md-7 col-md-3 col-sm-3" [(ngModel)]="searchTerm" name="search" placeholder="search" />
+      <button class="btn btn-secondary col-sm-2 col-md-2" (click)="search()">Search</button>
+  </div>
   <div class="row mb-2">
     <div class="col-3 themed-grid-col"></div>
     <div class="col-2 themed-grid-col"><strong>Title</strong></div>

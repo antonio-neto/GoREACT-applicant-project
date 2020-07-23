@@ -16,6 +16,7 @@ export class FilesListComponent implements OnInit {
   showErrorMessageFileType = false;
   filesUrl = `${environment.resourceUrl}${environment.filesFolder}/`;
   jpegFileType = 'image/jpeg';
+  searchTerm = '';
 
   constructor(private fileCrudService: FileCrudService) { }
 
@@ -24,7 +25,7 @@ export class FilesListComponent implements OnInit {
   }
 
   async getFiles() {
-    this.files = await this.fileCrudService.getFiles();
+    this.files = await this.fileCrudService.getFiles(this.searchTerm);
   }
 
   async onSubmit(form: NgForm) {
@@ -60,5 +61,9 @@ export class FilesListComponent implements OnInit {
 
   validContentType(fileType: string): boolean {
     return fileType === undefined || (fileType !== this.jpegFileType && fileType !== 'video/mp4') ? false : true;
+  }
+
+  async search() {
+    await this.getFiles();
   }
 }

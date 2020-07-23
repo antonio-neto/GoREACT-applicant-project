@@ -13,8 +13,8 @@ export class FileCrudService {
     this.apiUrl = `${environment.resourceUrl}${environment.apiUrl}/file`;
   }
 
-  async getFiles(): Promise<File[]> {
-    return this.http.get<File[]>(this.apiUrl).toPromise();
+  async getFiles(searchTerm: string): Promise<File[]> {
+    return this.http.get<File[]>(this.apiUrl + '?search=' + searchTerm).toPromise();
   }
 
   async addFile(formData: FormData, headers: HttpHeaders) {
