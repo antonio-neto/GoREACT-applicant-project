@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Models\File;
 use App\Requests\CreateFileRequest;
-use App\Services\FileService;
+use App\Services\Contracts\iFileService;
 
 class FileController extends Controller
 {
@@ -14,11 +14,11 @@ class FileController extends Controller
   private $objFiles;
   private $fileService;
 
-  public function __construct()
+  public function __construct(iFileService $fileService)
   {
       $this->objUser = new User();
       $this->objFile = new File();
-      $this->fileService = new FileService();
+      $this->fileService = $fileService;
   }
     
   public function index()

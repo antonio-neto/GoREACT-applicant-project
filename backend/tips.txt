@@ -27,3 +27,11 @@ Add migration
 	php artisan make:model Models\ModelFile -m
 Run migrations
 	php artisan migrate
+
+Run unit tests
+	php artisan make:test FileServiceTest --unit
+
+phpunit --configuration fiel
+
+Add services Provider to resolve DI
+	php artisan make:provider SocialServicesProvider

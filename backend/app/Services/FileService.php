@@ -7,8 +7,9 @@ use App\User;
 use App\Models\File;
 use App\Helpers\StringHelper;
 use App\ViewModels\FileViewModel;
+use App\Services\Contracts\iFileService;
 
-class FileService
+class FileService implements iFileService
 {
   private $objUsers;
   private $objFiles;
