@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\File;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -38,6 +38,8 @@ class User extends Authenticatable
     ];
 
     public function relFiles(){
-      return $this->hasMany('App\Models\File', 'id_user');
+      return $this->hasMany('App\Models\File', File::FIELD_ID_USER);
     }
+
+    public const TABLE_NAME = 'users';
 }

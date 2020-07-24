@@ -5,146 +5,77 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\File;
-use App\ViewModels\FileViewModel;
+use App\Requests\CreateFileRequest;
+use App\Services\FileService;
 
 class FileController extends Controller
 {
-    private $objUsers;
-    private $objFiles;
+  private $objUsers;
+  private $objFiles;
+  private $fileService;
 
-    public function __construct()
-    {
-        $this->objUser = new User();
-        $this->objFile = new File();
-    }
+  public function __construct()
+  {
+      $this->objUser = new User();
+      $this->objFile = new File();
+      $this->fileService = new FileService();
+  }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        // dd($this->objFile->all());
-        // dd($this->objUser->all());
-
-        $file = $this->objFile->all()->sortBy('file_name');
-        return view('index', compact('file'));
-    }
+  public function index()
+  {
+      $file = $this->objFile->all()->sortBy(File::FIELD_CREATED_AT);
+      return view('index', compact('file'));
+  }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getFiles(Request $request)
-    {
-        $searchTerm = $request->input('search');
-        if($searchTerm == 'undefined' || $searchTerm == null) {
-          $files = $this->objFile->all()->sortBy('created_at');
-        }
-        else{
-          $files = $this->objFile->where('title','LIKE','%'. $searchTerm .'%')
-          ->orWhere('description', 'LIKE', '%' . $searchTerm. '%')
-          ->orWhere('tags', 'LIKE', '%' . $searchTerm. '%')
-          ->get()->sortBy('created_at');
-        }
-        
-        $filesCount = $files->count();
-        if ($filesCount == 0){
-          return [];
-        }
-
-        $filesResult = array($filesCount);
-        for($auxFile = 0; $auxFile < $filesCount; $auxFile++){
-          $filesResult[$auxFile] = new FileViewModel($files[$auxFile]);
-        }
-
-        return $filesResult;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-      // dd($request->file('file'));
-      if ($request->hasFile('file'))
-      {
-            $file      = $request->file('file');
-            $mimeType = $file->getMimeType();
-            if ($mimeType !== 'image/jpeg' && $mimeType !== 'video/mp4'){
-              return response()->json(["message" => "File type not supported (only JPG/MP4)."]);
-            }
-
-            $filename  = $file->getClientOriginalName();
-            $fileNameSaved = date('YmdHis').'-'.$filename;
-            $file->move(public_path('content_files'), $fileNameSaved);
-            $currentDateTime = date('Y-m-d H:i:s');
-            $title = $request->title;
-            $description = $request->description;
-            $tags = $request->tags;
-            $this->objFile->create([
-              'file_name' => $filename,
-              'file_type' => $mimeType,
-              'file_name_saved' => $fileNameSaved,
-              'title' => $this->ConvertNotDefinedStringToEmpty($title),
-              'description' => $this->ConvertNotDefinedStringToEmpty($description),
-              'tags' => $this->ConvertNotDefinedStringToEmpty($tags),
-              'created_at' => $currentDateTime,
-              'updated_at' => $currentDateTime]);
-            return response()->json(["message" => "File Uploaded Succesfully"]);
-      } 
-      else
-      {
-        return response()->json(["message" => "Select a file first."]);
-      }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  string  $fileName
-     * @return \Illuminate\Http\Response
-     */
-    public function delete(int $id, string $fileName)
-    {
-      // dd(public_path('content_files' . DIRECTORY_SEPARATOR . $fileName));
-      // echo(public_path('content_files\\' .$fileName));
-      $deletionFileResult = unlink(public_path('content_files' . DIRECTORY_SEPARATOR . $fileName));
-
-      if(!$deletionFileResult){
-        return $this->createResponse($deletionFileResult, $fileName);
-      }
-
-      $deletionDBResult = $this->objFile->destroy($id);
-
-      return $this->createResponse($deletionDBResult, $fileName);
+  public function getFiles(Request $request)
+  {
+      $searchTerm = $request->input('search');
+      return $this->fileService->get($searchTerm);
   }
 
-  private function createResponse(bool $success, string $fileName)
+  public function create(Request $request)
+  {
+    if ($request->hasFile('file'))
     {
-      if ($success){
-        $errorMessage = '';
-        $httpCode = 200;
-        $message = 'File Successfully deleted!';
-      }
-      else{
-        $errorMessage = 'Not possibble to delete File ' . $fileName;
-        $httpCode = 500;
-        $message = $errorMessage;
-      }
+      $file = $request->file('file');
 
-      return response()->json(['errors' => [ $errorMessage ], 'message' => $message, 'status' => $httpCode], $httpCode);
+      $createFileRequest = new CreateFileRequest;
+      $createFileRequest->file = $file;
+      $createFileRequest->title = $request->title;
+      $createFileRequest->description = $request->description;
+      $createFileRequest->tags = $request->tags;
+
+      $response = $this->fileService->add($createFileRequest);
+      $result = $response === '';
+
+      return $this->createResponse($result, $result ? 'File Uploaded Succesfully' : $response);
+    } 
+    else
+    {
+      return $this->createResponse(false, 'Select a file first.');
+    }
   }
 
-  private function ConvertNotDefinedStringToEmpty(string $text){
-    if ($text == null || $text == 'null' || $text == 'undefined'){
-      return '';
+  public function delete(int $id)
+  {
+      $response = $this->fileService->delete($id);
+
+      return $this->createResponse($response, 'File Successfully deleted!', 'File does not exists.');
+  }
+
+  private function createResponse(bool $success, string $message, string $errorMessage = null)
+  {
+    if ($success){
+      $errorMessage = '';
+      $httpCode = 200;
+    }
+    else{
+      $httpCode = 500;
+      $message = '';
     }
 
-    return $text;
+    $errors = $errorMessage !== '' || $errorMessage != null ? [ $errorMessage ] : [];
+    
+    return response()->json(['errors' => $errors, 'message' => $message, 'status' => $httpCode], $httpCode);
   }
 }

@@ -47,6 +47,7 @@ export class FilesListComponent implements OnInit {
       await this.fileCrudService.addFile(formData, headers);
       await this.getFiles();
       form.reset();
+      this.filedata = null;
     }
   }
 

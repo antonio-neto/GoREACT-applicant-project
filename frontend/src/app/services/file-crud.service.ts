@@ -22,6 +22,6 @@ export class FileCrudService {
   }
 
   async deleteFile(file: File) {
-    return this.http.delete(`${this.apiUrl}/${file.id}/${file.savedName}`).toPromise();
+    return this.http.delete(`${this.apiUrl}/${file.id}`).toPromise();
   }
 }

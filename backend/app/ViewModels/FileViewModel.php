@@ -3,7 +3,6 @@
 namespace App\ViewModels;
 
 use App\Models\File;
-use App\ViewModels\UserViewModel;
 
 class FileViewModel
 {
@@ -16,12 +15,12 @@ class FileViewModel
     public $tags;
 
     public function __construct(File $file){
-      $this->id = $file->id;
-      $this->name = $file->file_name;
-      $this->type = $file->file_type;
-      $this->savedName = $file->file_name_saved;
-      $this->title = $file->title;
-      $this->description = $file->description;
-      $this->tags = $file->tags;
+      $this->id = $file[File::FIELD_ID];
+      $this->name = $file[File::FIELD_NAME];
+      $this->type = $file[File::FIELD_TYPE];
+      $this->savedName = $file[File::FIELD_NAME_SAVED];
+      $this->title = $file[File::FIELD_TITLE];
+      $this->description = $file[File::FIELD_DESCRIPTION];
+      $this->tags = $file[File::FIELD_TAGS];
     }
 }

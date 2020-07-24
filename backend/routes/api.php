@@ -19,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::get('/file', 'FileController@getFiles');
 Route::post('/file', 'FileController@create');
-Route::delete('/file/{id}/{fileName}', 'FileController@delete');
+Route::delete('/file/{id}', 'FileController@delete');
