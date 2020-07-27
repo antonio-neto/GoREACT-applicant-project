@@ -17,7 +17,7 @@ Versions:
 * Node: 10.16.3
 * Angular: 7.2.16
 
-## Requirements and how to deploy:
+## Requirements and how to deploy
 1) You need to have installed PHP interpreter v.7.2 and MySQL database engine. If you don't have the packages you can download [XAMPP package](https://www.apachefriends.org/download.html)
 2) You need to install Composer and Laravel. To do that download [Composer](https://getcomposer.org/download/) and then run `composer global require laravel/installer`
 3) Start Apache and MySQL services (if XAMPP installed, use XAMPP control panel)
