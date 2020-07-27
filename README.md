@@ -22,7 +22,7 @@ Versions:
 2) You need to install Composer and Laravel. To do that download [Composer](https://getcomposer.org/download/) and then run `composer global require laravel/installer`
 3) Start Apache and MySQL services via XAMPP task panel
 4) Create a new database with a name `GoREACT-applicant-project` and collation `utf8mb4_unicode_ci` (you can change configuration on [environment](backend/.env#L10) file). Use your own MySQL client or use [phpMyAdmin](http://localhost/phpmyadmin/)
-5) To create required tables run `php artisan migrate` from the project's root folder (with XAMPP installed, you should move your project into htdocs folder - please remove any contente before copying it)
+5) To create required tables run `php artisan migrate` from htdocs folder of XAMPP (if you have XAMPP installed, you should move your backend project into htdocs folder - please remove any contente before copying it)
 6) To create a symbolic link for uploaded files make `php artisan storage:link`
 7) To launch the backend server go to htdocs (if you have XAMPP installed) and make `php artisan serve`, the backend with the angular site will be accessible [here](http://localhost:8000/) on 8000 port
 8) To run tests go to htdocs folder of XAMPP and execute `php artisan test`
