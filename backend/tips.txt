@@ -31,7 +31,7 @@ Run migrations
 Run unit tests
 	php artisan make:test FileServiceTest --unit
 
-phpunit --configuration fiel
+php artisan test
 
 Add services Provider to resolve DI
 	php artisan make:provider SocialServicesProvider
