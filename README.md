@@ -31,4 +31,4 @@ Versions:
 To run tests to go to your project root folder and execute `php artisan test`
 
 ## Demo
-You can find a brief demo of the project [here](demo/demo.mp4)
+You can find a brief demo of the project [here](https://youtu.be/govaONropTo)
