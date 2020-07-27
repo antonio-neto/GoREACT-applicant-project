@@ -20,7 +20,7 @@ Versions:
 ## Steps to project deployment:
 1) You need to have installed PHP interpreter v.7.2 and MySQL database engine. If you don't have the packages you can download [XAMPP package](https://www.apachefriends.org/download.html)
 2) You need to install Composer and Laravel. To do that download [Composer](https://getcomposer.org/download/) and then run `composer global require laravel/installer`
-3) Start Apache and MySQL services via XAMPP task panel
+3) Start Apache and MySQL services (if XAMPP installed through XAMPP control panel)
 4) Create a new database with a name `GoREACT-applicant-project` and collation `utf8mb4_unicode_ci` (you can change configuration on [environment](backend/.env#L10) file). Use your own MySQL client or use [phpMyAdmin](http://localhost/phpmyadmin/)
 5) To create required tables run `php artisan migrate` from htdocs folder of XAMPP (if you have XAMPP installed, you should move your backend project into htdocs folder - please remove any contente before copying it)
 6) To create a symbolic link for uploaded files make `php artisan storage:link`
