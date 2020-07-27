@@ -17,6 +17,10 @@ export class FilesListComponent implements OnInit {
   filesUrl = `${environment.resourceUrl}${environment.filesFolder}/`;
   jpegFileType = 'image/jpeg';
   searchTerm = '';
+  myFile: any;
+  title: any;
+  description: any;
+  tags: any;
 
   constructor(private fileCrudService: FileCrudService) { }
 
